@@ -25,10 +25,15 @@ namespace Litenchain
 
             server.Start();
 
-            Console.WriteLine("1 = Connect to server, 2 = Add Tx, 3 = Display chain, 4 = Quit");
-            var inp = Console.ReadLine();
+            var quit = "10";
+            var instructions = $"0 = help, 1 = Connect to server, 2 = Add Tx, 3 = Display chain, 4 = Broadcast, 5 = Mine, {quit} = Quit";
+            Console.WriteLine(instructions);
 
-            while(inp != "4"){                
+            var inp = Console.ReadLine();
+            
+            while(inp != quit){   
+
+                if(inp == "0") Console.WriteLine(instructions);             
 
                 if (inp == "1")
                 {
@@ -57,9 +62,14 @@ namespace Litenchain
                     Console.WriteLine($"{currChain}");
                 }
 
-                if(inp == "5"){
+                if(inp == "4"){
                     Console.WriteLine("Broadcasting chain to subscribers");                     
                     client.Broadcast(JsonConvert.SerializeObject(Program.LitenCoin));
+                }
+
+                if(inp == "5"){
+                    Console.WriteLine("Processing pending tx");
+                    Program.LitenCoin.ProcessTxPending();
                 }
 
                 inp = Console.ReadLine();
